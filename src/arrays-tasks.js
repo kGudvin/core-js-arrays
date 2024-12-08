@@ -371,8 +371,12 @@ function calculateBalance(arr) {
  *    createChunks(['a', 'b', 'c', 'd', 'e'], 2) => [['a', 'b'], ['c', 'd'], ['e']]
  *    createChunks([10, 20, 30, 40, 50], 1) => [[10], [20], [30], [40], [50]]
  */
-function createChunks(/* arr, chunkSize */) {
-  throw new Error('Not implemented');
+function createChunks(arr, chunkSize) {
+  if (arr.length === 0) return [];
+  return [
+    arr.slice(0, chunkSize),
+    ...createChunks(arr.slice(chunkSize), chunkSize),
+  ];
 }
 
 /**
@@ -561,8 +565,19 @@ function findCommonElements(arr1, arr2) {
  *    findLongestIncreasingSubsequence([3, 10, 2, 1, 20]) => 2
  *    findLongestIncreasingSubsequence([50, 3, 10, 7, 40, 80]) => 3
  */
-function findLongestIncreasingSubsequence(/* nums */) {
-  throw new Error('Not implemented');
+function findLongestIncreasingSubsequence(nums) {
+  const result = nums.reduce(
+    (acc, _, index, array) => {
+      if (array[index] < array[index + 1]) {
+        acc[acc.length - 1] += 1;
+      } else {
+        acc.push(1);
+      }
+      return acc;
+    },
+    [1]
+  );
+  return Math.max(...result);
 }
 
 /**
@@ -579,8 +594,12 @@ function findLongestIncreasingSubsequence(/* nums */) {
  *  propagateItemsByPositionIndex([ 'a', 'b', 'c', null ]) => [ 'a', 'b', 'b', 'c', 'c', 'c',  null, null, null, null ]
  *  propagateItemsByPositionIndex([ 1,2,3,4,5 ]) => [ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  return arr
+    .map((el, i) => {
+      return Array(i + 1).fill(el);
+    })
+    .flat();
 }
 
 /**
@@ -596,8 +615,11 @@ function propagateItemsByPositionIndex(/* arr */) {
  *    shiftArray(['a', 'b', 'c', 'd'], -1) => ['b', 'c', 'd', 'a']
  *    shiftArray([10, 20, 30, 40, 50], -3) => [40, 50, 10, 20, 30]
  */
-function shiftArray(/* arr, n */) {
-  throw new Error('Not implemented');
+function shiftArray(arr, n) {
+  if (n >= 0) {
+    return [...arr.slice(arr.length - n), ...arr.slice(0, n + 1)];
+  }
+  return [...arr.slice(Math.abs(n)), ...arr.slice(0, Math.abs(n))];
 }
 
 /**
