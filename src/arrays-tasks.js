@@ -300,8 +300,14 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  if (n === 1) {
+    return Array(size).fill(0); // Базовый случай: одномерный массив
+  }
+
+  return Array(size)
+    .fill(null)
+    .map(() => createNDimensionalArray(n - 1, size));
 }
 
 /**
@@ -408,8 +414,15 @@ function generateOdds(len) {
  *   getElementByIndices(['one','two','three'], [2]) => 'three'  (arr[2])
  *   getElementByIndices([[[ 1, 2, 3]]], [ 0, 0, 1 ]) => 2        (arr[0][0][1])
  */
-function getElementByIndices(/* arr, indices */) {
-  throw new Error('Not implemented');
+function getElementByIndices(arr, indices) {
+  function goInside(array, index) {
+    return array[index];
+  }
+  const result = indices.reduce(
+    (accumulator, index) => goInside(accumulator, index),
+    arr
+  );
+  return result;
 }
 
 /**
@@ -424,8 +437,9 @@ function getElementByIndices(/* arr, indices */) {
  *  getFalsyValuesCount([ -1, 'false', null, 0 ]) => 2
  *  getFalsyValuesCount([ null, undefined, NaN, false, 0, '' ]) => 6
  */
-function getFalsyValuesCount(/* arr */) {
-  throw new Error('Not implemented');
+function getFalsyValuesCount(arr) {
+  const falsyElements = [null, undefined, NaN, false, 0, ''];
+  return arr.filter((el) => falsyElements.includes(el)).length;
 }
 
 /**
@@ -446,8 +460,14 @@ function getFalsyValuesCount(/* arr */) {
  *                              [0,0,0,1,0],
  *                              [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const semiResult = Array(n).fill(Array(n).fill(0));
+  const result = semiResult.map((el, i) => {
+    const element = [...el];
+    element[i] = 1;
+    return element;
+  });
+  return result;
 }
 
 /**
@@ -483,8 +503,10 @@ function getIndicesOfOddNumbers(numbers) {
  *    getHexRGBValues([ 0, 255, 16777215]) => [ '#000000', '#0000FF', '#FFFFFF' ]
  *    getHexRGBValues([]) => []
  */
-function getHexRGBValues(/* arr */) {
-  throw new Error('Not implemented');
+function getHexRGBValues(arr) {
+  return arr.map((num) => {
+    return `#${num.toString(16).padStart(6, '0').toUpperCase()}`;
+  });
 }
 
 /**
@@ -629,11 +651,23 @@ function sortDigitNamesByNumericOrder(arr) {
  *   swapHeadAndTail([]) => []
  *
  */
-function swapHeadAndTail(/*arr*/) {
-  /*if (arr.length >= 1) {
-    const firstPart = arr.slice(arr);
-  */
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  if (arr.length === 2) {
+    return arr.reverse();
+  }
+  if (arr.length % 2 === 0) {
+    const middle = Math.floor(arr.length / 2);
+    const head = arr.slice(0, middle);
+    const tail = arr.slice(middle);
+    return tail.concat(head);
+  }
+  const middle = Math.floor(arr.length / 2);
+  const head = arr.slice(0, middle);
+  const tail = arr.slice(middle + 1);
+  return tail.concat([arr[middle]], head);
 }
 
 module.exports = {
